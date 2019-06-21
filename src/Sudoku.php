@@ -140,14 +140,36 @@ class Sudoku
     {
         // check inputs
         if(!in_array($size,self::$dimensions,true)
-            || in_array($difficulty,range(0,5),true)    // todo
+            || in_array($difficulty,[self::VERY_EASY, self::EASY, self::NORMAL, self::MEDIUM, self::HARD],true)
             || ($seed !== null && !is_int($seed)) )
             throw new \InvalidArgumentException('Invalid input');
 
         // initialize random generator
         if($seed === null)
-            $seed = time();
+            $seed = random_int(0, 999999999);
 
+        $difficultyNumber = 1;
+        
+        switch($difficulty)
+        {
+            case self::VERY_EASY:
+                $difficultyNumber = 1;
+                break;
+            case self::EASY:
+                $difficultyNumber = 2;
+                break;
+            case self::NORMAL:
+                $difficultyNumber = 3;
+                break;
+            case self::MEDIUM:
+                $difficultyNumber = 4;
+                break;
+            case self::HARD:
+                $difficultyNumber = 5;
+                break;
+            default:
+                $difficultyNumber = 1;
+        }
         mt_srand($seed + $difficulty * 17);
 
         // select blocks to fill randomly
