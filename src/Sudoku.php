@@ -170,7 +170,7 @@ class Sudoku
             default:
                 $difficultyNumber = 1;
         }
-        mt_srand($seed + $difficulty * 17);
+        mt_srand($seed + $difficultyNumber * 17);
 
         // select blocks to fill randomly
         $cols = range(0, self::$blockSizes[$size] - 1);
