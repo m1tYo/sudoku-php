@@ -230,12 +230,39 @@ class Sudoku
 
         for($i = 0; $i < $numGapFields; $i++)
         {
-            $row = $gapFields[$i] % $size;
-            $col = ($gapFields[$i] - $row) / $size;
-            $task[$row][$col] = null;
+            $tries = 2;
+            for ($try = 0; $try < $tries; $try++) {
+                do {
+                    $randRow = mt_rand(0, $size - 1);
+                    $randCol = mt_rand(0, $size - 1);
+                } while ($task[$randRow][$randCol] == null);
+                if ($task[$randRow][$randCol] == null) {
+                    var_dump('pfew');
+                }
+
+                $backup = $task[$randRow][$randCol];
+                $task[$randRow][$randCol] = null;
+                if ( ! self::isUnique($task, $solution)) {
+                    $task[$randRow][$randCol] = $backup;
+                } else {
+                    break;
+                }
+            }
         }
 
         return [$task,$solution];
+    }
+
+    private static function isUnique($task, $solution)
+    {
+        for ($i = 0; $i < 5; $i++) {
+            $newSolution = self::solve($task);
+            if ($newSolution != $solution) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
