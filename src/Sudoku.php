@@ -228,24 +228,28 @@ class Sudoku
 
         $numGapFields = $numFields - mt_rand($min,$max);
 
-        for($i = 0; $i < $numGapFields; $i++)
-        {
-            $tries = 2;
-            for ($try = 0; $try < $tries; $try++) {
-                do {
-                    $randRow = mt_rand(0, $size - 1);
-                    $randCol = mt_rand(0, $size - 1);
-                } while ($task[$randRow][$randCol] == null);
-                if ($task[$randRow][$randCol] == null) {
-                    var_dump('pfew');
-                }
+        if ($size == 16) {
+            for($i = 0; $i < $numGapFields; $i++) {
+                $row = $gapFields[$i] % $size;
+                $col = ($gapFields[$i] - $row) / $size;
+                $task[$row][$col] = null;
+            }
+        } else {
+            for($i = 0; $i < $numGapFields; $i++) {
+                $tries = 2;
+                for ($try = 0; $try < $tries; $try++) {
+                    do {
+                        $randRow = mt_rand(0, $size - 1);
+                        $randCol = mt_rand(0, $size - 1);
+                    } while ($task[$randRow][$randCol] == null);
 
-                $backup = $task[$randRow][$randCol];
-                $task[$randRow][$randCol] = null;
-                if ( ! self::isUnique($task, $solution)) {
-                    $task[$randRow][$randCol] = $backup;
-                } else {
-                    break;
+                    $backup = $task[$randRow][$randCol];
+                    $task[$randRow][$randCol] = null;
+                    if ( ! self::isUnique($task, $solution)) {
+                        $task[$randRow][$randCol] = $backup;
+                    } else {
+                        break;
+                    }
                 }
             }
         }
