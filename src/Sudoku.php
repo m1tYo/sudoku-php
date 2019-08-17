@@ -259,7 +259,7 @@ class Sudoku
 
     private static function isUnique($task, $solution)
     {
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 3; $i++) {
             $newSolution = self::solve($task);
             if ($newSolution != $solution) {
                 return false;
